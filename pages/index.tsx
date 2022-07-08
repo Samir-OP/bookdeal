@@ -7,7 +7,7 @@ import styles from "../styles/Home.module.css";
 import styled from "styled-components";
 
 const Container = styled.div`
-  background: red;
+  background: blue;
 `;
 
 const Home: NextPage = () => {
