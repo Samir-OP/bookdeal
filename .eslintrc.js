@@ -13,10 +13,12 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react", "@typescript-eslint"],
-  rules: {},
+  rules: {
+    "require-jsdoc": "off",
+  },
   settings: {
     react: {
-      version: "latest",
+      version: "detect",
     },
   },
 };

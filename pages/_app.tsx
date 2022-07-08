@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import React from "react";
+import "rsuite/dist/rsuite.min.css";
 
 // eslint-disable-next-line require-jsdoc
 function MyApp({ Component, pageProps }: AppProps) {

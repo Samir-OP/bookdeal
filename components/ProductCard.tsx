@@ -1,0 +1,84 @@
+import React from "react";
+import {
+  Panel,
+  ButtonToolbar,
+  IconButton,
+  FlexboxGrid,
+  Badge,
+  // Notification,
+  // Placeholder,
+} from "rsuite";
+import { Icon } from "@rsuite/icons";
+
+type Props = {
+  title: string;
+  price: number;
+};
+
+const ProductCard: React.FunctionComponent<Props> = ({ title, price }) => {
+  const [content, setContent] = React.useState(0);
+
+  return (
+    <Panel
+      shaded
+      bordered
+      bodyFill
+      style={{ display: "inline-block", width: 240 }}
+    >
+      <img
+        src="https://via.placeholder.com/250x100"
+        height="100"
+        width="250"
+        draggable="false"
+      />
+      <Panel header={title}>
+        <FlexboxGrid justify="space-between" align="middle">
+          <p>
+            Price: <strong>${price}</strong>
+          </p>
+          <Badge content={content} color="blue">
+            <ButtonToolbar
+              onClick={() => setContent(content <= 4 ? content + 1 : content)}
+            >
+              <IconButton
+                style={{ padding: ".5rem .5rem", margin: 0 }}
+                size="xs"
+                icon={<Icon as={CartIcon} />}
+              ></IconButton>
+            </ButtonToolbar>
+          </Badge>
+        </FlexboxGrid>
+      </Panel>
+    </Panel>
+  );
+};
+
+function CartIcon() {
+  return (
+    <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M5 1.66666L2.5 4.99999V16.6667C2.5 17.1087 2.67559 17.5326 2.98816 17.8452C3.30072 18.1577 3.72464 18.3333 4.16667 18.3333H15.8333C16.2754 18.3333 16.6993 18.1577 17.0118 17.8452C17.3244 17.5326 17.5 17.1087 17.5 16.6667V4.99999L15 1.66666H5Z"
+        stroke="#4E60FF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M2.5 5H17.5"
+        stroke="#4E60FF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M13.3333 8.33334C13.3333 9.2174 12.9821 10.0652 12.357 10.6904C11.7319 11.3155 10.884 11.6667 9.99999 11.6667C9.11593 11.6667 8.26809 11.3155 7.64297 10.6904C7.01785 10.0652 6.66666 9.2174 6.66666 8.33334"
+        stroke="#4E60FF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export default ProductCard;
