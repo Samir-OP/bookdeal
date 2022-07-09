@@ -1,14 +1,48 @@
 import React from "react";
-import type { NextPage } from "next";
 import Head from "next/head";
-
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
-import Products from "../components/Products";
+import ProductCart from "../components/ProductCard";
+import axios from "axios";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 const Container = styled.div``;
+const Grid = styled.div`
+  display: grid;
+  place-content: center;
+  padding: 5rem;
+`;
+const ProductsContainer = styled.div`
+  display: grid;
+  gap: 2rem;
 
-const Home: NextPage = () => {
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 900px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (min-width: 1500px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+`;
+
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  stock: number;
+  image: string;
+};
+
+const Home: InferGetServerSidePropsType<typeof getServerSideProps> = ({
+  product,
+}: {
+  product: Product[];
+}) => {
   return (
     <Container>
       <Head>
@@ -18,9 +52,33 @@ const Home: NextPage = () => {
       </Head>
 
       <Navbar />
-      <Products />
+
+      <Grid>
+        <ProductsContainer>
+          {product.map((value: Product) => (
+            <ProductCart
+              key={value.id}
+              title={value.name}
+              price={value.price}
+              image={value.image}
+              stock={value.stock}
+            />
+          ))}
+        </ProductsContainer>
+      </Grid>
     </Container>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const result = await axios.get("http://localhost:3000/api/product");
+  const data: Product[] = result.data;
+
+  return {
+    props: {
+      product: data,
+    },
+  };
 };
 
 export default Home;

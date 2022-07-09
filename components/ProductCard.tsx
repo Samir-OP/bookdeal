@@ -1,55 +1,76 @@
 import React from "react";
-import {
-  Panel,
-  ButtonToolbar,
-  IconButton,
-  FlexboxGrid,
-  Badge,
-  // Notification,
-  // Placeholder,
-} from "rsuite";
+import { Panel, ButtonToolbar, IconButton, FlexboxGrid, Badge } from "rsuite";
 import { Icon } from "@rsuite/icons";
+import Image from "next/image";
+import styled from "styled-components";
+import { alert } from "../base/alert";
 
 type Props = {
   title: string;
   price: number;
+  image: string;
+  stock: number;
 };
 
-const ProductCard: React.FunctionComponent<Props> = ({ title, price }) => {
+const PanelStyle = styled(Panel)`
+  display: inline-block;
+  width: 250;
+  cursor: pointer;
+  transition: 0.5s;
+  &:hover {
+    transform: translateY(-10px);
+  }
+`;
+
+const ProductCard: React.FunctionComponent<Props> = ({
+  title,
+  price,
+  image,
+  stock,
+  // id,
+}) => {
   const [content, setContent] = React.useState(0);
 
+  const onClick = () => {
+    if (content < stock) {
+      setContent(content + 1);
+    } else {
+      alert("error", `We have only ${stock} stocks of this product.`);
+    }
+  };
+
   return (
-    <Panel
-      shaded
-      bordered
-      bodyFill
-      style={{ display: "inline-block", width: 240 }}
-    >
-      <img
-        src="https://via.placeholder.com/250x100"
-        height="100"
-        width="250"
-        draggable="false"
-      />
-      <Panel header={title}>
-        <FlexboxGrid justify="space-between" align="middle">
-          <p>
-            Price: <strong>${price}</strong>
-          </p>
-          <Badge content={content} color="blue">
-            <ButtonToolbar
-              onClick={() => setContent(content <= 4 ? content + 1 : content)}
-            >
-              <IconButton
-                style={{ padding: ".5rem .5rem", margin: 0 }}
-                size="xs"
-                icon={<Icon as={CartIcon} />}
-              ></IconButton>
-            </ButtonToolbar>
-          </Badge>
-        </FlexboxGrid>
-      </Panel>
-    </Panel>
+    <>
+      <PanelStyle shaded bordered bodyFill>
+        <Image
+          src={image}
+          draggable="false"
+          height="150px"
+          width="250px"
+          objectFit="cover"
+          objectPosition="top"
+          priority={false}
+        />
+
+        <Panel header={title}>
+          <FlexboxGrid justify="space-between" align="middle">
+            <p>
+              Price: <strong>${price}</strong>
+            </p>
+            <Badge content={content} color="blue">
+              <ButtonToolbar>
+                <IconButton
+                  style={{ padding: ".5rem" }}
+                  onClick={onClick}
+                  size="xs"
+                  icon={<Icon as={CartIcon} />}
+                ></IconButton>
+              </ButtonToolbar>
+            </Badge>
+          </FlexboxGrid>
+        </Panel>
+      </PanelStyle>
+    </>
   );
 };
 
