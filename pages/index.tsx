@@ -36,6 +36,7 @@ type Product = {
   price: number;
   stock: number;
   image: string;
+  slug: string;
 };
 
 const Home: InferGetServerSidePropsType<typeof getServerSideProps> = ({
@@ -62,6 +63,7 @@ const Home: InferGetServerSidePropsType<typeof getServerSideProps> = ({
               price={value.price}
               image={value.image}
               stock={value.stock}
+              slug={value.slug}
             />
           ))}
         </ProductsContainer>

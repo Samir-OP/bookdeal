@@ -4,12 +4,14 @@ import { Icon } from "@rsuite/icons";
 import Image from "next/image";
 import styled from "styled-components";
 import { alert } from "../base/alert";
+import { useRouter } from "next/router";
 
 type Props = {
   title: string;
   price: number;
   image: string;
   stock: number;
+  slug: string;
 };
 
 const PanelStyle = styled(Panel)`
@@ -27,8 +29,10 @@ const ProductCard: React.FunctionComponent<Props> = ({
   price,
   image,
   stock,
-  // id,
+  slug,
 }) => {
+  const router = useRouter();
+
   const [content, setContent] = React.useState(0);
 
   const onClick = () => {
@@ -40,7 +44,7 @@ const ProductCard: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <>
+    <div onClick={() => router.push("/product/" + slug)}>
       <PanelStyle shaded bordered bodyFill>
         <Image
           src={image}
@@ -55,7 +59,7 @@ const ProductCard: React.FunctionComponent<Props> = ({
         <Panel header={title}>
           <FlexboxGrid justify="space-between" align="middle">
             <p>
-              Price: <strong>${price}</strong>
+              Price: <strong>₹{price}</strong>
             </p>
             <Badge content={content} color="blue">
               <ButtonToolbar>
@@ -70,7 +74,7 @@ const ProductCard: React.FunctionComponent<Props> = ({
           </FlexboxGrid>
         </Panel>
       </PanelStyle>
-    </>
+    </div>
   );
 };
 

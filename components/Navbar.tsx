@@ -1,18 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import styled from "styled-components";
-
+import { useRouter } from "next/router";
 import { InputGroup, AutoComplete } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
-
-const data = [
-  "HYPER Advertiser",
-  "HYPER Web Analytics",
-  "HYPER Video Analytics",
-  "HYPER DMP",
-  "HYPER Ad Serving",
-  "HYPER Data Discovery",
-];
+import axios from "axios";
 
 const NavContainer = styled.div`
   display: flex;
@@ -42,7 +34,7 @@ const NavContainer = styled.div`
       display: flex;
       padding: 0.1rem;
       align-items: center;
-      transition: 0.2s;
+      transition: border 0.2s;
       cursor: pointer;
       &:hover {
         border: 3px solid rgba(52, 152, 255, 1);
@@ -51,22 +43,51 @@ const NavContainer = styled.div`
   }
 `;
 
-const Input = styled(InputGroup)``;
+type Product = {
+  slug: string;
+  name: string;
+};
 
 const Navbar: React.FunctionComponent = () => {
+  const router = useRouter();
+  const [searchData, setSearchData] = React.useState<Product[]>([]);
+
+  const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const data = await (
+      await axios.post(`/api/product/search`, {
+        search: e.target.value,
+      })
+    ).data;
+    setSearchData(data);
+  };
+
   return (
     <NavContainer>
       <span id="left">
-        <p id="title">
+        <p id="title" onClick={() => router.push("/")}>
           Book<span style={{ color: "#4E60FF" }}>Deal</span>
         </p>
         <div>
-          <Input inside>
-            <AutoComplete data={data as []} placeholder="Search Books" />
+          <InputGroup inside onChange={onChange}>
+            <AutoComplete
+              data={searchData.map((d) => d.name) as []}
+              placeholder="Search Books"
+              onSelect={(e) =>
+                router.push(
+                  `/product/${
+                    searchData[
+                      searchData
+                        .map((d) => d.name)
+                        .findIndex((e) => e.toLowerCase() === e.toLowerCase())
+                    ].slug
+                  }`
+                )
+              }
+            />
             <InputGroup.Button>
               <SearchIcon />
             </InputGroup.Button>
-          </Input>
+          </InputGroup>
         </div>
       </span>
 
