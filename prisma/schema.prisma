@@ -18,3 +18,18 @@ model Product {
   stock Int
   image String
 }
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  profile   String
+  email     String
+  password  String
+  phone     String
+  addresses String[]
+}
+
+model Cart {
+  id String @unique
+
+}
